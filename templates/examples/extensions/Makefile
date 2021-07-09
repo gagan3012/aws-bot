@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 PWD=$(shell pwd)
 DSTDIR=$(PWD)/../../../build/lambda/
 # Remove obsolete KendraFallback folder from the build system - removed in github but needs local removal

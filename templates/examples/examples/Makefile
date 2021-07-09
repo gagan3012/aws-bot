@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 NAME=$(shell basename $(shell pwd))
 DST=../../../build/lambda/$(NAME).zip
 

@@ -41,7 +41,7 @@ Vue.use(Vuex)
 Vue.use(Router)
 Vue.use(Vuetify,{
 theme:{
-    primary: '#1fbcd3',
+    primary: '#002145',
     accent: '#ffbb00',
     secondary: '#3157d5',
     info: '#0D47A1',

@@ -9,7 +9,7 @@ module.exports={
     "Resources":_.assign.apply({},files),
     "Conditions": {},
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "QnABot nested import resources",
+    "Description": "UBCO Bot nested import resources",
     "Outputs": require('./outputs'),
     "Parameters": {
         "CFNLambda":{"Type":"String"},

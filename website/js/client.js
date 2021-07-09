@@ -25,15 +25,15 @@ Vue.use(Vuetify);
 var config = {
   cognito:{},
   lex: {
-    initialText:"Ask a Question",
+    initialText:"Hi, I am the UBCO Chatbot. I can help you discover the services and events at UBCO. Say Hello to get started",
     initialSpeechInstruction:"",
     reInitSessionAttributesOnRestart: false
   },
   ui:{
-    pageTitle:"QnABot Client",
-    toolbarColor:"cyan",
-    toolbarTitle:"QnABot",
-    toolbarLogo:null,
+    pageTitle:"UBCO Bot",
+    toolbarColor:"#002145",
+    toolbarTitle:"UBCO Bot",
+    toolbarLogo:"https://ubcologo.s3.amazonaws.com/ubc-logo-2018-ok-campus-short-+(1).png",
     pushInitialTextOnRestart:false,
     AllowSuperDangerousHTMLInMessage:true,
     showDialogStateIcon:false,
@@ -41,7 +41,7 @@ var config = {
     positiveFeedbackIntent: "Thumbs up",
     negativeFeedbackIntent: "Thumbs down",
     helpIntent: "Help",
-    messageMenu: true
+    messageMenu: true,
   },
   recorder:{}
 }

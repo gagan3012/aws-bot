@@ -2079,14 +2079,139 @@ exports.resources={
             "name": "live",
             "description": "QNA Name Alias - " + botDateVersion
         }
-    }
+    },
+    "FacultySlotType":{
+        "Condition": "CreateLexV1Bots",
+        "Type": "Custom::LexSlotType",
+        "Properties": {
+            "ServiceToken": {"Ref": "CFNLambda"},
+            "name":{"Fn::Sub":"FacultySlotType-${AWS::StackName}"},
+            "description": "UBCO Faculty Slot Type - " + botDateVersion,
+            "createVersion": true,
+            "valueSelectionStrategy": "TOP_RESOLUTION",
+            "enumerationValues": [
+                {"value":"Arts", "synonyms":["arts"]},
+                {"value":"Science", "synonyms":["science"]},
+                {"value":"Applied Science", "synonyms":["Apsc","APSC"]},
+                {"value":"Sauder", "synonyms":["Management","Commnerce","Comm"]}
+            ]
+        }
+    },
+    "QNAFacultyIntent": {
+        "Condition": "CreateLexV1Bots",
+        "Type": "Custom::LexIntent",
+        "Properties": {
+            "ServiceToken": {"Ref": "CFNLambda"},
+            "name":{"Fn::Sub":"QNAYesNoIntent-${AWS::StackName}"},
+            "createVersion": true,
+            "description": "QNA Faculty Intent - " + botDateVersion,
+            "sampleUtterances": [
+                "{Facultytype}",
+                "I am in {Facultytype}"
+            ],
+            conclusionStatement: {
+                messages: [
+                    {
+                        content: "OK. ",
+                        contentType: "PlainText"
+                    }
+                ],
+            },
+            rejectionStatement: {
+                messages: [
+                    {
+                    contentType: "PlainText",
+                    content: "Please let me know your faculty again?"
+                    }
+                ],
+            },
+            confirmationPrompt: {
+                messages: [
+                    {
+                    contentType: "PlainText",
+                    content: "Did I get your Faculty right (Yes or No) {Facultytype} ?"
+                    }
+                ],
+                maxAttempts: 3
+            },
+            fulfillmentActivity: {
+                type: "ReturnIntent"
+            },
+            "slots": [
+                {
+                    "name":"Facultytype",
+                    "slotType":{"Ref":"FacultySlotType"},
+                    "slotTypeVersion":"QNABOT-AUTO-ASSIGNED",
+                    "slotConstraint": "Required",
+                    "valueElicitationPrompt": {
+                        "messages": [
+                            {
+                                "contentType": "PlainText",
+                                "content": "What is your faculty?"
+                            }
+                        ],
+                        "maxAttempts": 2
+                    },
+                    "priority": 1,
+                }
+            ],
+        },
+    },
+    "QNAFacultyBot":{
+        "Condition": "CreateLexV1Bots",
+        "Type": "Custom::LexBot",
+        "DependsOn": ["FacultySlotType", "QNAFacultyIntent"],
+        "Properties": {
+            "ServiceToken": {"Ref": "CFNLambda"},
+            "name":{"Fn::Sub":"QNAFacultyBot-${AWS::StackName}"},
+            "description": "QNA Faculty Bot - " + botDateVersion,
+            "locale": "en-US",
+            "voiceId": config.voiceId,
+            "childDirected": false,
+            "createVersion": true,
+            "intents": [
+                {"intentName": {"Ref": "QNAFacultyIntent"}},
+            ],
+            "clarificationPrompt": {
+                "messages": [
+                    {
+                    "contentType": "PlainText",
+                    "content": "Sorry, can you please repeat that?"
+                    }
+                ],
+                "maxAttempts": 5
+            },
+            "abortStatement": {
+                "messages": [
+                    {
+                        "content": config.Abort,
+                        "contentType": "PlainText"
+                    }
+                ]
+            },
+        }
+    },
+    "FacultyAliasV2": {
+        "Condition": "CreateLexV1Bots",
+        "Type": "Custom::LexAlias",
+        "DependsOn": "QNAFacultyBot",
+        "Properties": {
+            "ServiceToken": {"Ref": "CFNLambda"},
+            "botName": {
+                "Ref": "QNAFacultyBot"
+            },
+            "name": "live",
+            "description": "QNA Faculty Bot Alias - " + botDateVersion,
+        }
+    },
+
 };
 
 
 exports.names=[
     "QNAYesNo", "QNAYesNoExit", "QNADate", "QNADateNoConfirm", "QNADayOfWeek", "QNAMonth", "QNAMonthNoConfirm",
     "QNANumber", "QNANumberNoConfirm", "QNAAge","QNAPhoneNumber", "QNAPhoneNumberNoConfirm",
-    "QNATime", "QNAEmailAddress", "QNAName", "QNAWage","QNASocialSecurity","QNAPin", "QNAPinNoConfirm"
+    "QNATime", "QNAEmailAddress", "QNAName", "QNAWage","QNASocialSecurity","QNAPin", "QNAPinNoConfirm","QNAFacultyBot"
 ] ;
 
 

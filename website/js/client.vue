@@ -1,6 +1,6 @@
 <template lang='pug'>
   div(id="qna-client")
-    v-toolbar(color="cyan" v-if="$store.state.username")
+    v-toolbar(color="blue" v-if="$store.state.username")
       v-toolbar-title {{title}}
       v-spacer
       v-toolbar-items
@@ -32,7 +32,7 @@ module.exports={
   computed:{
     title:function(){
       var name=this.$store.state.Username
-      return name ? 'QnABot: '+name : "QnABot"
+      return name ? 'UBCO Bot: '+name : "UBCO Bot"
     }
   },
   methods:{}

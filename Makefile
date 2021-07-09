@@ -27,8 +27,8 @@ website: build
 assets: build 
 	$(MAKE) -C ./assets
 
-samples:docs/blog-samples.json build
-	cp docs/blog-samples.json build/documents
+samples:templates/examples/examples/examples/ubco_qna_1.json build
+	cp templates/examples/examples/examples/ubco_qna_1.json build/documents
 
 upload: templates lambda website build assets
 	./bin/upload.sh
